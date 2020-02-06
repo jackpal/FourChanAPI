@@ -4,20 +4,20 @@ import Combine
 import Foundation
 
 func fourChanPublisher() -> AnyPublisher<FourChan, Error> {
-  return URLLoader(url:FourChanJSONURLs.boards())
+  return URLLoader(url:APIService.Endpoint.boards.url())
     .decode(type: Boards.self, decoder: JSONDecoder())
     .tryMap { categorize(boards: $0) }
     .eraseToAnyPublisher()
 }
 
 func chanThreadPublisher(board: BoardName, no: PostNumber) -> AnyPublisher<ChanThread, Error> {
-  return URLLoader(url:FourChanJSONURLs.thread(board: board, no: no))
+  return URLLoader(url:APIService.Endpoint.thread(board: board, no: no).url())
     .decode(type: ChanThread.self, decoder: JSONDecoder())
     .eraseToAnyPublisher()
 }
 
 func catalogThreadPublisher(board: BoardName) -> AnyPublisher<Catalog, Error> {
-  return URLLoader(url:FourChanJSONURLs.catalog(board: board))
+  return URLLoader(url:APIService.Endpoint.catalog(board: board).url())
     .decode(type: Catalog.self, decoder: JSONDecoder())
     .eraseToAnyPublisher()
 }

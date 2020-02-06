@@ -24,29 +24,21 @@ public struct FourChanSearchResultsThread: Codable, Identifiable {
   public var id: String { return thread}
 }
 
-public extension FourChanJSONURLs {
-  static func search(query:String,
-                     offset: Int? = nil,
-                     length: Int? = nil,
-                     board: String?) -> URL? {
-    var components = URLComponents()
-     components.scheme = "https"
-     components.host = "p.4chan.org"
-     components.path = "/api/search"
-     components.queryItems = [
-         URLQueryItem(name: "q", value: query)
-      ]
-    if let offset = offset {
-      components.queryItems?.append( URLQueryItem(name: "o", value: "\(offset)"))
-    }
-    if let length = length {
-      components.queryItems?.append( URLQueryItem(name: "l", value: "\(length)"))
-    }
-    if let board = board {
-      components.queryItems?.append( URLQueryItem(name: "b", value: board))
-    }
-    return components.url
+func search(query:String,
+            offset: Int? = nil,
+            length: Int? = nil,
+            board: String?) -> URL? {
+  var params = ["q":query]
+  if let offset = offset {
+    params["o"] = "\(offset)"
   }
+  if let length = length {
+    params["l"] = "\(length)"
+  }
+  if let board = board {
+    params["b"] = board
+  }
+  return APIService.Endpoint.search.url(params: params)
 }
 
 public extension FourChanSearchResults {

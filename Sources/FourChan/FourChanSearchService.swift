@@ -6,7 +6,7 @@ import Foundation
 public func fourChanSearchResultsPublisher(board: String? = nil,
                                     query:String) ->
   AnyPublisher<FourChanSearchResults, Error> {
-  var request = URLRequest(url: FourChanJSONURLs.search(
+  var request = URLRequest(url: search(
     query:query, board: board)!
     )
   // Required for the API to return results. Presumably this will

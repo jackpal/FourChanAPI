@@ -24,11 +24,11 @@ extension PostInContext {
   public var imageURL: URL? {
     var url: URL? = nil
     if let tim = post.tim, let ext = post.ext, ext.isReadableImageType() {
-      url = FourChanJSONURLs
-        .image(board: board, tim: tim, ext: ext)
+      url = APIService.Endpoint
+        .image(board: board, tim: tim, ext: ext).url()
     } else if let tim = post.tim {
-      url = FourChanJSONURLs
-        .thumbnail(board: board, tim: tim)
+      url = APIService.Endpoint
+        .thumbnail(board: board, tim: tim).url()
     }
     
     return url
