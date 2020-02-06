@@ -1,5 +1,9 @@
 import Foundation
 
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
+
 // This service API was adapted from the github.com/Dimillian/MovieSwiftUI APIService.
 
 public struct APIService {
