@@ -8,7 +8,7 @@ This package supports both closure and Combine-based networking.
 
 If you load the package in an environment that doesn't support Combine, then the Combine APIs won't be available.
 
-An example of using the API with mininal helper functions
+An example of using the API with minimal helper functions:
 
 ```
 import Foundation
