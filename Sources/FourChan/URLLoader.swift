@@ -1,3 +1,5 @@
+#if canImport(Combine)
+
 import Combine
 import Foundation
 
@@ -21,3 +23,5 @@ public func URLLoader(urlRequest:URLRequest) -> AnyPublisher<Data, Error> {
     .eraseToAnyPublisher()
   }
 }
+
+#endif
