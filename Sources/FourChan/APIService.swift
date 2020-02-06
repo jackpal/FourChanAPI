@@ -6,8 +6,8 @@ import FoundationNetworking
 
 // This service API was adapted from the github.com/Dimillian/MovieSwiftUI APIService.
 
-public struct APIService {
-  public static let shared = APIService()
+public struct FourChanAPIService {
+  public static let shared = FourChanAPIService()
   let decoder = JSONDecoder()
   
   public enum APIError: Error {
@@ -60,7 +60,7 @@ public struct APIService {
       }
     }
 
-    func url(params: [String:String]? = nil) -> URL {
+    public func url(params: [String:String]? = nil) -> URL {
       var components = URLComponents(url: URL(string:path)!, resolvingAgainstBaseURL: true)!
       if let params = params {
         components.queryItems = params.map { (key, value) in

@@ -20,7 +20,7 @@ public class FourChanService {
   }
 
   public func boards() -> AnyPublisher<Boards, Error> {
-    session.dataTaskPublisher(for: APIService.Endpoint.boards.url())
+    session.dataTaskPublisher(for: FourChanAPIService.Endpoint.boards.url())
       .retry(APIRetryCount)
       .map {
         $0.data
@@ -31,7 +31,7 @@ public class FourChanService {
   
   public func catalog(board: BoardName) -> AnyPublisher<Catalog, Error> {
     session.dataTaskPublisher(for:
-      APIService.Endpoint.catalog(board:board).url())
+      FourChanAPIService.Endpoint.catalog(board:board).url())
       .retry(APIRetryCount)
       .map {
         $0.data
@@ -42,7 +42,7 @@ public class FourChanService {
   
   public func thread(board: BoardName, no: PostNumber) -> AnyPublisher<ChanThread, Error> {
     session.dataTaskPublisher(for:
-      APIService.Endpoint.thread(board:board, no: no).url())
+      FourChanAPIService.Endpoint.thread(board:board, no: no).url())
       .map {
         $0.data
       }
@@ -52,7 +52,7 @@ public class FourChanService {
   
   public func threads(board: BoardName, page: PageNumber) -> AnyPublisher<Threads, Error> {
     session.dataTaskPublisher(for:
-      APIService.Endpoint.threads(board: board, page: page).url())
+      FourChanAPIService.Endpoint.threads(board: board, page: page).url())
       .retry(APIRetryCount)
       .map {
         $0.data
@@ -64,7 +64,7 @@ public class FourChanService {
   // The threads have minimal information filled in.
   public func threads(board: BoardName) -> AnyPublisher<Pages, Error> {
     session.dataTaskPublisher(for:
-      APIService.Endpoint.allThreads(board: board).url())
+      FourChanAPIService.Endpoint.allThreads(board: board).url())
       .retry(APIRetryCount)
       .map {
         $0.data
@@ -75,7 +75,7 @@ public class FourChanService {
   
   public func archive(board: BoardName) -> AnyPublisher<Archive, Error> {
     session.dataTaskPublisher(
-      for: APIService.Endpoint.archive(board: board).url())
+      for: FourChanAPIService.Endpoint.archive(board: board).url())
       .retry(APIRetryCount)
       .map {
         $0.data
@@ -87,7 +87,7 @@ public class FourChanService {
   // Useful for image types that can't decode into UIImage, such as webm and swf.
   public func imageData(board: BoardName, tim: Int, ext: String) -> AnyPublisher<Data, URLError> {
     session.dataTaskPublisher(for:
-      APIService.Endpoint.image(board: board, tim: tim, ext: ext).url())
+      FourChanAPIService.Endpoint.image(board: board, tim: tim, ext: ext).url())
       .retry(APIRetryCount)
       .map {
         $0.data
@@ -102,7 +102,7 @@ public extension FourChanService {
   
   func image(board: BoardName, tim: Int, ext: String) -> AnyPublisher<UIImage, URLError> {
     session.dataTaskPublisher(for:
-      APIService.Endpoint.image(board: board, tim: tim, ext: ext).url())
+      FourChanAPIService.Endpoint.image(board: board, tim: tim, ext: ext).url())
       .retry(APIRetryCount)
       .map { $0.data }
       .compactMap(UIImage.init(data:))
@@ -111,7 +111,7 @@ public extension FourChanService {
 
   func thumbnail(board: BoardName, tim: Int) -> AnyPublisher<UIImage, URLError> {
     session.dataTaskPublisher(for:
-      APIService.Endpoint.thumbnail(board: board, tim: tim).url())
+      FourChanAPIService.Endpoint.thumbnail(board: board, tim: tim).url())
       .retry(APIRetryCount)
       .map { $0.data }
       .compactMap(UIImage.init(data:))
