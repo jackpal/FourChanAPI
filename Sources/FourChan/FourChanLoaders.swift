@@ -1,3 +1,5 @@
+#if canImport(Combine)
+
 import Combine
 import Foundation
 
@@ -128,3 +130,5 @@ public class CatalogLoader : ObservableObject {
     cancellable?.cancel()
   }
 }
+
+#endif // canImport(Combine)
