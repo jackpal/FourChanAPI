@@ -9,6 +9,8 @@ public class PostTextParser {
     case deadLink(text: String)
     case anchor(text: String, href: String)
   }
+  
+  public init(){}
 
   public func parse(text: String, consumer: (Element) -> Void ) {
     var tagStack: [String] = []
