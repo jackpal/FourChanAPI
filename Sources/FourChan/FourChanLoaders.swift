@@ -26,7 +26,7 @@ public class Loader<T> : ObservableObject {
         .map { Optional($0) }
         .replaceError(with: nil)
         .receive(on: RunLoop.main)
-      .assign(to: \Loader.data, on: self)
+        .assign(to: \Loader.data, on: self)
     }
   }
   
@@ -37,31 +37,37 @@ public class Loader<T> : ObservableObject {
 
 func loader<T: Codable>(endpoint: FourChanAPIEndpoint) -> AnyPublisher<T, Error> {
   URLLoader(url:endpoint.url())
-  .decode(type: T.self, decoder: JSONDecoder())
-  .eraseToAnyPublisher()
-}
-
-func fourChanPublisher() -> AnyPublisher<FourChan, Error> {
-  loader(endpoint: .boards)
-    .tryMap { categorize(boards: $0) }
+    .decode(type: T.self, decoder: JSONDecoder())
     .eraseToAnyPublisher()
 }
 
-
 public class FourChanLoader : Loader<FourChan> {
+  
   public init() {
-    super.init(publisher:fourChanPublisher())
+    super.init(publisher:FourChanLoader.fourChanPublisher())
+  }
+  
+  static func fourChanPublisher() -> AnyPublisher<FourChan, Error> {
+    loader(endpoint: .boards)
+      .tryMap { categorize(boards: $0) }
+      .eraseToAnyPublisher()
   }
 }
 
 public class ChanThreadLoader : Loader<ChanThread> {
+  public let board: BoardName
+  public let no: PostNumber
   public init(board: BoardName, no: PostNumber) {
+    self.board = board
+    self.no = no
     super.init(publisher: loader(endpoint: .thread(board: board, no: no)))
   }
 }
 
 public class CatalogLoader : Loader<Catalog> {
+  public let board: BoardName
   public init(board: BoardName) {
+    self.board = board
     super.init(publisher: loader(endpoint: .catalog(board: board)))
   }
 }
