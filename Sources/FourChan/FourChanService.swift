@@ -18,81 +18,45 @@ public class FourChanService {
     self.session = session
     self.decoder = decoder
   }
-
-  public func boards() -> AnyPublisher<Boards, Error> {
-    session.dataTaskPublisher(for: FourChanAPIService.Endpoint.boards.url())
+  
+  public func publisher<T: Codable>(endpoint: FourChanAPIService.Endpoint) -> AnyPublisher<T, Error> {
+    session.dataTaskPublisher(for: endpoint.url())
       .retry(APIRetryCount)
       .map {
         $0.data
       }
-      .decode(type: Boards.self, decoder: decoder)
+      .decode(type: T.self, decoder: decoder)
       .eraseToAnyPublisher()
+  }
+
+  public func boards() -> AnyPublisher<Boards, Error> {
+    publisher(endpoint:.boards)
   }
   
   public func catalog(board: BoardName) -> AnyPublisher<Catalog, Error> {
-    session.dataTaskPublisher(for:
-      FourChanAPIService.Endpoint.catalog(board:board).url())
-      .retry(APIRetryCount)
-      .map {
-        $0.data
-      }
-      .decode(type: Catalog.self, decoder: decoder)
-      .eraseToAnyPublisher()
+     publisher(endpoint:.catalog(board:board))
   }
   
   public func thread(board: BoardName, no: PostNumber) -> AnyPublisher<ChanThread, Error> {
-    session.dataTaskPublisher(for:
-      FourChanAPIService.Endpoint.thread(board:board, no: no).url())
-      .map {
-        $0.data
-      }
-      .decode(type: ChanThread.self, decoder: decoder)
-      .eraseToAnyPublisher()
+    publisher(endpoint:.thread(board:board, no: no))
   }
   
   public func threads(board: BoardName, page: PageNumber) -> AnyPublisher<Threads, Error> {
-    session.dataTaskPublisher(for:
-      FourChanAPIService.Endpoint.threads(board: board, page: page).url())
-      .retry(APIRetryCount)
-      .map {
-        $0.data
-      }
-      .decode(type: Threads.self, decoder: decoder)
-      .eraseToAnyPublisher()
+    publisher(endpoint:.threads(board: board, page: page))
   }
   
   // The threads have minimal information filled in.
   public func threads(board: BoardName) -> AnyPublisher<Pages, Error> {
-    session.dataTaskPublisher(for:
-      FourChanAPIService.Endpoint.allThreads(board: board).url())
-      .retry(APIRetryCount)
-      .map {
-        $0.data
-      }
-      .decode(type: Pages.self, decoder: decoder)
-      .eraseToAnyPublisher()
+    publisher(endpoint:.allThreads(board: board))
   }
   
   public func archive(board: BoardName) -> AnyPublisher<Archive, Error> {
-    session.dataTaskPublisher(
-      for: FourChanAPIService.Endpoint.archive(board: board).url())
-      .retry(APIRetryCount)
-      .map {
-        $0.data
-      }
-      .decode(type: Archive.self, decoder: decoder)
-      .eraseToAnyPublisher()
+    publisher(endpoint:.archive(board: board))
   }
   
   // Useful for image types that can't decode into UIImage, such as webm and swf.
-  public func imageData(board: BoardName, tim: Int, ext: String) -> AnyPublisher<Data, URLError> {
-    session.dataTaskPublisher(for:
-      FourChanAPIService.Endpoint.image(board: board, tim: tim, ext: ext).url())
-      .retry(APIRetryCount)
-      .map {
-        $0.data
-      }
-      .eraseToAnyPublisher()
+  public func imageData(board: BoardName, tim: Int, ext: String) -> AnyPublisher<Data, Error> {
+    publisher(endpoint:.image(board: board, tim: tim, ext: ext))
   }
 }
 
@@ -100,22 +64,18 @@ public class FourChanService {
 #if canImport(UIKit)
 public extension FourChanService {
   
-  func image(board: BoardName, tim: Int, ext: String) -> AnyPublisher<UIImage, URLError> {
-    session.dataTaskPublisher(for:
-      FourChanAPIService.Endpoint.image(board: board, tim: tim, ext: ext).url())
-      .retry(APIRetryCount)
-      .map { $0.data }
-      .compactMap(UIImage.init(data:))
-      .eraseToAnyPublisher()
+  func publisher(endpoint: FourChanAPIService.Endpoint) -> AnyPublisher<UIImage, Error> {
+    publisher(endpoint:endpoint)
+    .compactMap(UIImage.init(data:))
+    .eraseToAnyPublisher()
+  }
+  
+  func image(board: BoardName, tim: Int, ext: String) -> AnyPublisher<UIImage, Error> {
+    publisher(endpoint:.image(board:board, tim:tim, ext:ext))
   }
 
-  func thumbnail(board: BoardName, tim: Int) -> AnyPublisher<UIImage, URLError> {
-    session.dataTaskPublisher(for:
-      FourChanAPIService.Endpoint.thumbnail(board: board, tim: tim).url())
-      .retry(APIRetryCount)
-      .map { $0.data }
-      .compactMap(UIImage.init(data:))
-      .eraseToAnyPublisher()
+  func thumbnail(board: BoardName, tim: Int) -> AnyPublisher<UIImage, Error> {
+    publisher(endpoint:.thumbnail(board: board, tim: tim))
   }
 }
 #endif

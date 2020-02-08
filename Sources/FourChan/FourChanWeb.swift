@@ -1,3 +1,5 @@
+import Foundation
+
 public struct FourChanWeb {
   public enum Endpoint {
     case root

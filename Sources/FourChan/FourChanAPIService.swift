@@ -70,7 +70,10 @@ public struct FourChanAPIService {
       return components.url!
     }
   }
-  
+}
+
+// A completion-handler-based API
+extension FourChanAPIService {
   
   public func GET<T: Codable>(endpoint: Endpoint,
                               params: [String:String]? = nil,

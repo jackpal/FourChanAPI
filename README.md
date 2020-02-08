@@ -4,8 +4,17 @@ A Swift package for the [4chan.org Read-only HTTP/JSON API](https://github.com/4
 
 # Features
 
-- Typesafe URLs for the 4chan API (FourChanAPIService.Endpoint) and web site. (FourChanWeb.Endpoint)
-- Codable structs for all the 4chan API data.
+- Typesafe URLs for
+  - the 4chan API (FourChanAPIService.Endpoint)
+    - the experimental 4chan mobile search API (FourChanAPIService.Endpoint.search)
+  - the 4chan web site. (FourChanWeb.Endpoint)
+- Codable structs for all the 4chan API result types (e.g. Post).
+  - the structs implement Identifiable where possible.
+- Helpers for making network requests in a variety of styles:
+  - using closures.
+  - using Combine publishers.
+  - using SwiftUI ObsevableObjects.
+
 
 # Usage
 
