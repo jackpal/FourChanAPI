@@ -83,18 +83,16 @@ public extension FourChanService {
 public extension FourChanService {
   typealias PostWithContext = (post: Post, boardName: String)
   
-  func allPosts() -> AnyPublisher<PostWithContext, Never> {
+  func allPosts() -> AnyPublisher<PostWithContext, Error> {
     typealias PagesWithContext = (pages: Pages, boardName: BoardName)
 
     return boards()
-    .assertNoFailure()
     .flatMap {
-      Publishers.Sequence<[Board], Never>(sequence: $0.boards)
+      Publishers.Sequence<[Board], Error>(sequence: $0.boards)
     }
-    .flatMap { (board: Board) -> AnyPublisher<PagesWithContext, Never> in
+    .flatMap { (board: Board) -> AnyPublisher<PagesWithContext, Error> in
       let boardName = board.board
       return self.threads(board:boardName)
-      .assertNoFailure()
       .map {
         // Return a tuple of board and result in order to pass the
         // board down to the subsequent thread call.
@@ -103,26 +101,25 @@ public extension FourChanService {
       .eraseToAnyPublisher()
     }
     .flatMap { pagesWithContext in
-      Publishers.Sequence<[Page], Never>(sequence: pagesWithContext.pages)
+      Publishers.Sequence<[Page], Error>(sequence: pagesWithContext.pages)
       .map {
         (page:$0, boardName:pagesWithContext.boardName)
       }
     }
     .flatMap { pageWithContext in
-      Publishers.Sequence<[Post], Never>(sequence: pageWithContext.page.threads)
+      Publishers.Sequence<[Post], Error>(sequence: pageWithContext.page.threads)
       .map {
         (post: $0, boardName: pageWithContext.boardName)
       }
     }
     .flatMap { postWithContext in
       self.thread(board:postWithContext.boardName, no:postWithContext.post.no)
-      .assertNoFailure()
       .map {
         (thread: $0, boardName: postWithContext.boardName)
       }
     }
     .flatMap { threadWithContext in
-      Publishers.Sequence<Posts, Never>(sequence: threadWithContext.thread.posts)
+      Publishers.Sequence<Posts, Error>(sequence: threadWithContext.thread.posts)
       .map {
         (post: $0, boardName: threadWithContext.boardName)
       }
