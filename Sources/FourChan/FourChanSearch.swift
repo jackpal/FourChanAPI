@@ -38,7 +38,7 @@ func search(query:String,
   if let board = board {
     params["b"] = board
   }
-  return FourChanAPIService.Endpoint.search.url(params: params)
+  return FourChanAPIEndpoint.search.url(params: params)
 }
 
 public extension FourChanSearchResults {

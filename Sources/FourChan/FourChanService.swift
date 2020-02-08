@@ -19,7 +19,7 @@ public class FourChanService {
     self.decoder = decoder
   }
   
-  public func publisher<T: Codable>(endpoint: FourChanAPIService.Endpoint) -> AnyPublisher<T, Error> {
+  public func publisher<T: Codable>(endpoint: FourChanAPIEndpoint) -> AnyPublisher<T, Error> {
     session.dataTaskPublisher(for: endpoint.url())
       .retry(APIRetryCount)
       .map {
@@ -64,7 +64,7 @@ public class FourChanService {
 #if canImport(UIKit)
 public extension FourChanService {
   
-  func publisher(endpoint: FourChanAPIService.Endpoint) -> AnyPublisher<UIImage, Error> {
+  func publisher(endpoint: FourChanAPIEndpoint) -> AnyPublisher<UIImage, Error> {
     publisher(endpoint:endpoint)
     .compactMap(UIImage.init(data:))
     .eraseToAnyPublisher()
