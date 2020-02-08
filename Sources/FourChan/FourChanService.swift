@@ -81,9 +81,8 @@ public extension FourChanService {
 #endif
 
 public extension FourChanService {
-  typealias PostWithContext = (post: Post, boardName: String)
   
-  func allPosts() -> AnyPublisher<PostWithContext, Error> {
+  func allPosts() -> AnyPublisher<PostInContext, Error> {
     typealias PagesWithContext = (pages: Pages, boardName: BoardName)
 
     return boards()
@@ -115,13 +114,15 @@ public extension FourChanService {
     .flatMap { postWithContext in
       self.thread(board:postWithContext.boardName, no:postWithContext.post.no)
       .map {
-        (thread: $0, boardName: postWithContext.boardName)
+        (thread: $0, boardName: postWithContext.boardName, no:postWithContext.post.no)
       }
     }
     .flatMap { threadWithContext in
       Publishers.Sequence<Posts, Error>(sequence: threadWithContext.thread.posts)
       .map {
-        (post: $0, boardName: threadWithContext.boardName)
+        PostInContext(board: threadWithContext.boardName,
+                      thread: threadWithContext.no,
+                      post: $0)
       }
     }
     .eraseToAnyPublisher()
