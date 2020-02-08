@@ -3,23 +3,24 @@
 import Combine
 import Foundation
 
+func loader<T: Codable>(endpoint: FourChanAPIEndpoint) -> AnyPublisher<T, Error> {
+  URLLoader(url:endpoint.url())
+  .decode(type: T.self, decoder: JSONDecoder())
+  .eraseToAnyPublisher()
+}
+
 func fourChanPublisher() -> AnyPublisher<FourChan, Error> {
-  return URLLoader(url:FourChanAPIEndpoint.boards.url())
-    .decode(type: Boards.self, decoder: JSONDecoder())
+  loader(endpoint: .boards)
     .tryMap { categorize(boards: $0) }
     .eraseToAnyPublisher()
 }
 
 func chanThreadPublisher(board: BoardName, no: PostNumber) -> AnyPublisher<ChanThread, Error> {
-  return URLLoader(url:FourChanAPIEndpoint.thread(board: board, no: no).url())
-    .decode(type: ChanThread.self, decoder: JSONDecoder())
-    .eraseToAnyPublisher()
+  loader(endpoint: .thread(board: board, no: no))
 }
 
 func catalogThreadPublisher(board: BoardName) -> AnyPublisher<Catalog, Error> {
-  return URLLoader(url:FourChanAPIEndpoint.catalog(board: board).url())
-    .decode(type: Catalog.self, decoder: JSONDecoder())
-    .eraseToAnyPublisher()
+  loader(endpoint: .catalog(board: board))
 }
 
 public class FourChanLoader : ObservableObject {
