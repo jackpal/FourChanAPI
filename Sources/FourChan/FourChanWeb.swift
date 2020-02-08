@@ -5,7 +5,9 @@ public enum FourChanWebEndpoint {
   case catalog(board: BoardName)
   case thread(board: BoardName, thread:Int)
   case post(board: BoardName, thread:Int, post: Int)
-  
+}
+
+extension FourChanWebEndpoint {
   func path() -> String {
     switch self {
     case .root:
@@ -18,8 +20,10 @@ public enum FourChanWebEndpoint {
       return "https://boards.4chan.org/\(board)/thread/\(thread)#p\(post)"
     }
   }
-  
-  public var url: URL {
+}
+
+public extension FourChanWebEndpoint {
+  var url: URL {
     return URL(string:path())!
   }
 }
