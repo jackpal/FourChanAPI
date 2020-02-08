@@ -1,9 +1,8 @@
 import Foundation
 
-// This is a reverse-engineered, undocumented API that's used for
-// the 4chan Mobile API.
-// Not sure how stable it is...
-
+/// This is a reverse-engineered, undocumented API that's used for
+/// the 4chan Mobile API.
+/// Not sure how stable it is...
 public struct FourChanSearchResults: Codable {
   public let body: FourChanSearchResultsBody?
 }

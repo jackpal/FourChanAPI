@@ -4,9 +4,9 @@ import Foundation
 import FoundationNetworking
 #endif
 
-// This service API was adapted from the github.com/Dimillian/MovieSwiftUI APIService.
-
-// A completion-handler-based API
+/// A completion-handler-based API.
+///
+/// This service API was adapted from the github.com/Dimillian/MovieSwiftUI APIService.
 public struct FourChanAPIService {
   public static let shared = FourChanAPIService()
   let decoder = JSONDecoder()

@@ -1,5 +1,8 @@
 import Foundation
 
+/// The endpoints that make up the read-only 4chan API.
+///
+/// See https://github.com/4chan/4chan-API
 public enum FourChanAPIEndpoint {
   case boards
   case catalog(board: BoardName)
@@ -13,6 +16,7 @@ public enum FourChanAPIEndpoint {
   case spoilerImage
   case flag(country: String)
   case polFlag(country: String)
+  /// Mobile Search endpoint. Takes additional query parameters.
   case search
 }
 

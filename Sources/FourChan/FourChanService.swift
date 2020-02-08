@@ -6,6 +6,7 @@ import Combine
 import UIKit
 #endif
 
+/// The FourChan API exposed as Combine Publishers.
 public class FourChanService {
   
   public static let shared = FourChanService()
@@ -45,7 +46,7 @@ public class FourChanService {
     publisher(endpoint:.threads(board: board, page: page))
   }
   
-  // The threads have minimal information filled in.
+  /// The threads have minimal information filled in.
   public func threads(board: BoardName) -> AnyPublisher<Pages, Error> {
     publisher(endpoint:.allThreads(board: board))
   }
@@ -54,7 +55,7 @@ public class FourChanService {
     publisher(endpoint:.archive(board: board))
   }
   
-  // Useful for image types that can't decode into UIImage, such as webm and swf.
+  /// Useful for image types that can't decode into UIImage, such as webm and swf.
   public func imageData(board: BoardName, tim: Int, ext: String) -> AnyPublisher<Data, Error> {
     publisher(endpoint:.image(board: board, tim: tim, ext: ext))
   }
@@ -82,9 +83,7 @@ public extension FourChanService {
 
 public extension FourChanService {
   /**
-    Returns a publisher that iterates through all currently published posts.
-    
-    Not super practical, just for fun.
+    Returns a publisher of all posts.
    */
   func posts() -> AnyPublisher<PostInContext, Error> {
     boards()

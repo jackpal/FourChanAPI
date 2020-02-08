@@ -1,5 +1,6 @@
 import Foundation
 
+/// Endpoints for the 4Chan web site. Useful for sharing browsable URLs.
 public enum FourChanWebEndpoint {
   case root
   case catalog(board: BoardName)

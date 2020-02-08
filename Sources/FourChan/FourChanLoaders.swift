@@ -41,6 +41,7 @@ func loader<T: Codable>(endpoint: FourChanAPIEndpoint) -> AnyPublisher<T, Error>
     .eraseToAnyPublisher()
 }
 
+/// Top level loader for 4chan.
 public class FourChanLoader : Loader<FourChan> {
   
   public init() {
@@ -54,6 +55,7 @@ public class FourChanLoader : Loader<FourChan> {
   }
 }
 
+/// Loader for a 4chan thred.
 public class ChanThreadLoader : Loader<ChanThread> {
   public let board: BoardName
   public let no: PostNumber
@@ -64,6 +66,7 @@ public class ChanThreadLoader : Loader<ChanThread> {
   }
 }
 
+/// Loader for a 4chan catalog.
 public class CatalogLoader : Loader<Catalog> {
   public let board: BoardName
   public init(board: BoardName) {

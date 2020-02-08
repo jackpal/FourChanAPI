@@ -75,6 +75,7 @@ public struct FourChan {
 public struct Category {
   public let title: String
   public let boards: Boards
+  /// True if the boards in this category are Not Safe For Work (NSFW).
   public let nsfw: Bool
 }
 

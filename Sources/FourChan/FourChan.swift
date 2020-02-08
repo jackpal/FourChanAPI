@@ -131,6 +131,7 @@ public struct Post : Codable {
   /// Time when last modified Unix timestamp.
   public let last_modified: Int?
   /// Thread tag.
+  /// 
   /// Only displays on /f/
   public let tag: String?
   /// Year 4chan pass bought.
@@ -141,8 +142,10 @@ extension Post: Identifiable {
   public var id: Int { return no }
 }
 
-// Naming this "Thread" causes SwiftUI previews to fail to compile.
-// Error: 'Thread' is ambiguous for type lookup in this context
+/// A FourChan Thread.
+///
+/// Naming this "Thread" causes SwiftUI previews to fail to compile.
+/// Error: 'Thread' is ambiguous for type lookup in this context
 public struct ChanThread: Codable {
   public let posts: Posts
 }
@@ -163,6 +166,11 @@ public struct Threads : Codable {
 }
 
 public extension String {
+  /**
+   Returns the un-escaped version of  an HTML-encoded String.
+   
+   Just does the conversions actually seen on 4chan content.
+   */
   var clean: String {
     self
       .replacingOccurrences(of: "&#039;", with: "'")

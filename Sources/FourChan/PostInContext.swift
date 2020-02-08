@@ -3,9 +3,12 @@ import CoreGraphics
 #endif
 import Foundation
 
-// A boardname, thread, and post.
-// This object isn't part of the official FourChanAPI, but it's a useful
-// construct for processing 4Chan posts, so we include it in our library.
+/**
+ A boardname, thread, and post.
+ 
+ This object isn't part of the official FourChanAPI, but it's a useful
+ construct for processing 4Chan posts, so we include it in our library.
+ */
 public struct PostInContext {
   public let board: BoardName
   public let thread: Int
@@ -21,6 +24,10 @@ public struct PostInContext {
 #if canImport(CoreGraphics)
 extension PostInContext {
   
+  /** Returns the post's image URL.
+   
+   If the image isn't readable, return the thumbnail.
+   */
   public var imageURL: URL? {
     var url: URL? = nil
     if let tim = post.tim, let ext = post.ext, ext.isReadableImageType() {
@@ -34,6 +41,7 @@ extension PostInContext {
     return url
   }
   
+  /// Return the imageURL image's size.
   public var imageSize: CGSize? {
     var w = 0
     var h = 0
