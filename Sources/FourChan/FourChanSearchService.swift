@@ -3,6 +3,7 @@
 import Combine
 import Foundation
 
+/// Search using the experimental 4chan mobile search API.
 public func fourChanSearchResultsPublisher(board: String? = nil,
                                     query:String) ->
   AnyPublisher<FourChanSearchResults, Error> {
