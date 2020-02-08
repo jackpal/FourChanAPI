@@ -81,47 +81,47 @@ public extension FourChanService {
 #endif
 
 public extension FourChanService {
+  /**
+    Returns a publisher that iterates through all currently published posts.
+    
+    Not super practical, just for fun.
+   */
+  func posts() -> AnyPublisher<PostInContext, Error> {
+    boards()
+    .flatMap { boards in
+      Publishers.Sequence<[Board], Error>(sequence: boards.boards)
+        .flatMap { board in
+          self.posts(board:board.board)
+      }
+    }.eraseToAnyPublisher()
+  }
   
-  func allPosts() -> AnyPublisher<PostInContext, Error> {
-    typealias PagesWithContext = (pages: Pages, boardName: BoardName)
-
-    return boards()
-    .flatMap {
-      Publishers.Sequence<[Board], Error>(sequence: $0.boards)
-    }
-    .flatMap { (board: Board) -> AnyPublisher<PagesWithContext, Error> in
-      let boardName = board.board
-      return self.threads(board:boardName)
+  /**
+   Returns a publisher of all posts in a given board.
+   */
+  func posts(board: BoardName) -> AnyPublisher<PostInContext, Error> {
+    threads(board:board)
+      .flatMap { pages in
+        Publishers.Sequence<[Page], Error>(sequence: pages)
+          .flatMap { page in
+            Publishers.Sequence<[Post], Error>(sequence: page.threads)
+              .flatMap { post in
+                self.posts(board:board, no:post.no)
+            }
+        }
+    }.eraseToAnyPublisher()
+  }
+  
+  /**
+   Returns a publisher of all posts in a given thread, identified by board name and post number.
+   */
+  func posts(board: BoardName, no:PostNumber) -> AnyPublisher<PostInContext, Error> {
+    thread(board:board, no:no)
+    .flatMap { chanThread in
+      Publishers.Sequence<Posts, Error>(sequence: chanThread.posts)
       .map {
-        // Return a tuple of board and result in order to pass the
-        // board down to the subsequent thread call.
-        (pages:$0, boardName:boardName)
-      }
-      .eraseToAnyPublisher()
-    }
-    .flatMap { pagesWithContext in
-      Publishers.Sequence<[Page], Error>(sequence: pagesWithContext.pages)
-      .map {
-        (page:$0, boardName:pagesWithContext.boardName)
-      }
-    }
-    .flatMap { pageWithContext in
-      Publishers.Sequence<[Post], Error>(sequence: pageWithContext.page.threads)
-      .map {
-        (post: $0, boardName: pageWithContext.boardName)
-      }
-    }
-    .flatMap { postWithContext in
-      self.thread(board:postWithContext.boardName, no:postWithContext.post.no)
-      .map {
-        (thread: $0, boardName: postWithContext.boardName, no:postWithContext.post.no)
-      }
-    }
-    .flatMap { threadWithContext in
-      Publishers.Sequence<Posts, Error>(sequence: threadWithContext.thread.posts)
-      .map {
-        PostInContext(board: threadWithContext.boardName,
-                      thread: threadWithContext.no,
+        PostInContext(board: board,
+                      thread: no,
                       post: $0)
       }
     }
