@@ -50,8 +50,8 @@ public struct Page : Codable {
   public let threads: Posts
 }
 
-public extension Page : Identifiable {
-  var id : Int {
+extension Page : Identifiable {
+  public var id : Int {
     page
   }
 }
