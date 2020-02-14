@@ -50,6 +50,12 @@ public struct Page : Codable {
   public let threads: Posts
 }
 
+public extension Page : Identifiable {
+  var id : Int {
+    page
+  }
+}
+
 public typealias Pages = [Page]
 
 /// A message from a user.
