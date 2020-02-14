@@ -79,6 +79,12 @@ public struct Category {
   public let nsfw: Bool
 }
 
+extension Category : Identifiable {
+  public var id: String {
+    title
+  }
+}
+
 func categorize(boards: Boards) -> FourChan {
   var dict = [String: [Board]]()
   boards.boards.forEach { board in
