@@ -33,7 +33,7 @@ public extension PostInContext {
   }
   
   var thumbNail: FourChanAPIEndpoint? {
-    if let tim = post.tim, let ext = post.ext, ext.isReadableImageType() {
+    if let tim = post.tim {
       return FourChanAPIEndpoint.thumbnail(board: board, tim: tim)
     } else {
       return nil
