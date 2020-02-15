@@ -55,24 +55,33 @@ public class FourChanLoader : Loader<FourChan> {
   }
 }
 
-/// Loader for a 4chan thred.
+/// Loader for a 4chan catalog.
+public class CatalogLoader : Loader<Catalog> {
+  public let board: BoardName
+  public init(board: BoardName) {
+    self.board = board
+    super.init(publisher: CatalogLoader.publisher(board: board))
+  }
+  
+  static func publisher(board: BoardName) -> AnyPublisher<Catalog, Error> {
+    loader(endpoint: .catalog(board: board))
+  }
+}
+
+/// Loader for a 4chan thread.
 public class ChanThreadLoader : Loader<ChanThread> {
   public let board: BoardName
   public let no: PostNumber
   public init(board: BoardName, no: PostNumber) {
     self.board = board
     self.no = no
-    super.init(publisher: loader(endpoint: .thread(board: board, no: no)))
+    super.init(publisher: ChanThreadLoader.publisher(board:board, no:no))
+  }
+  
+  static func publisher(board: BoardName, no: PostNumber) -> AnyPublisher<ChanThread, Error> {
+    loader(endpoint: .thread(board: board, no: no))
   }
 }
 
-/// Loader for a 4chan catalog.
-public class CatalogLoader : Loader<Catalog> {
-  public let board: BoardName
-  public init(board: BoardName) {
-    self.board = board
-    super.init(publisher: loader(endpoint: .catalog(board: board)))
-  }
-}
 
 #endif // canImport(Combine)
