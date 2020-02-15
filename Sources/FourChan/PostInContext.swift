@@ -71,7 +71,7 @@ public extension PostInContext {
   
   var thumbNailSize: CGSize? {
     if let w = post.tn_w,
-      let h = post.tn_w {
+      let h = post.tn_h {
       return CGSize(width: CGFloat(w), height: CGFloat(h))
     }
     return nil
