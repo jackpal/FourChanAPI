@@ -5,6 +5,7 @@ import Foundation
 public typealias PostNumber = Int
 public typealias BoardName = String
 public typealias PageNumber = Int
+public typealias ImageNumber = Int
 
 public typealias Archive = [PostNumber]
 
@@ -92,7 +93,7 @@ public struct Post : Codable {
   public let com: String?
   /// Renamed filename (for fetching image).
   /// Based on unix timestamp plus milliseconds.
-  public let tim: Int?
+  public let tim: ImageNumber?
   /// Original filename.
   public let filename: String?
   /// File extension. .jpg, .png, .gif, .pdf, .swf, .webm

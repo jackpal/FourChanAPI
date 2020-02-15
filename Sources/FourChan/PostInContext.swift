@@ -1,6 +1,7 @@
 #if canImport(CoreGraphics)
 import CoreGraphics
 #endif
+
 import Foundation
 
 /**
@@ -21,44 +22,68 @@ public struct PostInContext {
   }
 }
 
-#if canImport(CoreGraphics)
-extension PostInContext {
+public extension PostInContext {
   
-  /** Returns the post's image URL.
-   
-   If the image isn't readable, return the thumbnail.
-   */
-  public var imageURL: URL? {
-    var url: URL? = nil
+  var image : FourChanAPIEndpoint? {
     if let tim = post.tim, let ext = post.ext, ext.isReadableImageType() {
-      url = FourChanAPIEndpoint
-        .image(board: board, tim: tim, ext: ext).url()
-    } else if let tim = post.tim {
-      url = FourChanAPIEndpoint
-        .thumbnail(board: board, tim: tim).url()
-    }
-    
-    return url
-  }
-  
-  /// Return the imageURL image's size.
-  public var imageSize: CGSize? {
-    var w = 0
-    var h = 0
-    if post.ext?.isReadableImageType() ?? false {
-      w = post.w ?? 0
-      h = post.h ?? 0
+      return FourChanAPIEndpoint.image(board: board, tim: tim, ext: ext)
     } else {
-      w = post.tn_w ?? 0
-      h = post.tn_h ?? 0
-    }
-    
-    if w == 0 || h == 0 {
       return nil
     }
-    
-    return CGSize(width: CGFloat(w), height: CGFloat(h))
+  }
+  
+  var thumbNail: FourChanAPIEndpoint? {
+    if let tim = post.tim, let ext = post.ext, ext.isReadableImageType() {
+      return FourChanAPIEndpoint.thumbnail(board: board, tim: tim)
+    } else {
+      return nil
+    }
+  }
+  
+  // A rendereable image. Might be the thumbnail if the image isn't a renderable type.
+  var renderableImage: FourChanAPIEndpoint? {
+    if let ext = post.ext, ext.isReadableImageType() {
+      return image
+    }
+    return thumbNail
+  }
+  
+  /** Returns the post's image URL.
+   If the image isn't renderable, return the thumbnail.
+   */
+  var renderableImageURL: URL? {
+    renderableImage?.url()
+  }
+  
+}
+
+#if canImport(CoreGraphics)
+
+public extension PostInContext {
+
+  var imageSize: CGSize? {
+    if let w = post.w,
+      let h = post.h {
+      return CGSize(width: CGFloat(w), height: CGFloat(h))
+    }
+    return nil
+  }
+  
+  var thumbNailSize: CGSize? {
+    if let w = post.tn_w,
+      let h = post.tn_w {
+      return CGSize(width: CGFloat(w), height: CGFloat(h))
+    }
+    return nil
+  }
+  
+  /// Return the renderableImageURL image's size.
+  var renderableImageSize: CGSize? {
+    if let ext = post.ext, ext.isReadableImageType() {
+      return imageSize
+    }
+    return thumbNailSize
   }
 }
 
-#endif
+#endif // canImport(CoreGraphics)

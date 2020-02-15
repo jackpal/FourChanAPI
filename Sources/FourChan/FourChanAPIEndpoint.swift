@@ -11,8 +11,8 @@ public enum FourChanAPIEndpoint {
   /// The threads have minimal information filled in.
   case allThreads(board: BoardName)
   case archive(board: BoardName)
-  case image(board: BoardName, tim: Int, ext: String)
-  case thumbnail(board: BoardName, tim: Int)
+  case image(board: BoardName, tim: ImageNumber, ext: String)
+  case thumbnail(board: BoardName, tim: ImageNumber)
   case spoilerImage
   case flag(country: String)
   case polFlag(country: String)

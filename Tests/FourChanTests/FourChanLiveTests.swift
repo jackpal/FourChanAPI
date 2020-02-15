@@ -30,6 +30,19 @@ final class FourChanLiveTests: XCTestCase {
     validTest.cancellable?.cancel()
   }
   
+  // MARK: Measuring time to fetch images.
+  
+  func testImageDatas() {
+    let publisher = FourChanService.shared.posts(board:"a")
+      .imageDatas()
+      .collect(100)
+    let validTest = evalValidResponseTest(publisher: publisher)
+    wait(for: validTest.expectations, timeout: 100)
+    validTest.cancellable?.cancel()
+  }
+
+  // MARK: Private methods
+  
   // Adapted from https://medium.com/better-programming/swift-unit-test-a-datataskpublisher-with-urlprotocol-2fbda186758e
   func evalValidResponseTest<T:Publisher>(publisher: T?) -> (expectations:[XCTestExpectation], cancellable: AnyCancellable?) {
     XCTAssertNotNil(publisher)
@@ -64,5 +77,6 @@ final class FourChanLiveTests: XCTestCase {
     ("testFourChanLoader", testFourChanLoader),
     ("testCatalogLoader", testCatalogLoader),
     ("testChanThreadLoader", testChanThreadLoader),
+    ("testImageDatas", testImageDatas),
   ]
 }

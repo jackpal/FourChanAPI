@@ -19,13 +19,17 @@ public class FourChanService {
     self.session = session
     self.decoder = decoder
   }
-  
-  public func publisher<T: Codable>(endpoint: FourChanAPIEndpoint) -> AnyPublisher<T, Error> {
+
+  public func dataPublisher(endpoint: FourChanAPIEndpoint) -> AnyPublisher<Data, Error> {
     session.dataTaskPublisher(for: endpoint.url())
       .retry(APIRetryCount)
-      .map {
-        $0.data
-      }
+      .map{$0.data}
+      .mapError {$0 as Error}
+      .eraseToAnyPublisher()
+  }
+  
+  public func publisher<T: Codable>(endpoint: FourChanAPIEndpoint) -> AnyPublisher<T, Error> {
+    dataPublisher(endpoint: endpoint)
       .decode(type: T.self, decoder: decoder)
       .eraseToAnyPublisher()
   }
@@ -66,7 +70,7 @@ public class FourChanService {
 public extension FourChanService {
   
   func publisher(endpoint: FourChanAPIEndpoint) -> AnyPublisher<UIImage, Error> {
-    publisher(endpoint:endpoint)
+    publisher(endpoint: endpoint)
     .compactMap(UIImage.init(data:))
     .eraseToAnyPublisher()
   }
