@@ -36,9 +36,7 @@ public class Loader<T> : ObservableObject {
 }
 
 func loader<T: Codable>(endpoint: FourChanAPIEndpoint) -> AnyPublisher<T, Error> {
-  URLLoader(url:endpoint.url())
-    .decode(type: T.self, decoder: JSONDecoder())
-    .eraseToAnyPublisher()
+   FourChanService.shared.publisher(endpoint:endpoint)
 }
 
 /// Top level loader for 4chan.
@@ -58,9 +56,10 @@ public class FourChanLoader : Loader<FourChan> {
 /// Loader for a 4chan catalog.
 public class CatalogLoader : Loader<Catalog> {
   public let board: BoardName
-  public init(board: BoardName) {
+  public init(board: BoardName,
+              publisher: AnyPublisher<Catalog, Error>? = nil) {
     self.board = board
-    super.init(publisher: CatalogLoader.publisher(board: board))
+    super.init(publisher:publisher ?? CatalogLoader.publisher(board: board))
   }
   
   static func publisher(board: BoardName) -> AnyPublisher<Catalog, Error> {
@@ -72,10 +71,11 @@ public class CatalogLoader : Loader<Catalog> {
 public class ChanThreadLoader : Loader<ChanThread> {
   public let board: BoardName
   public let no: PostNumber
-  public init(board: BoardName, no: PostNumber) {
+  public init(board: BoardName, no: PostNumber,
+  publisher: AnyPublisher<ChanThread, Error>? = nil) {
     self.board = board
     self.no = no
-    super.init(publisher: ChanThreadLoader.publisher(board:board, no:no))
+    super.init(publisher:publisher ??  ChanThreadLoader.publisher(board:board, no:no))
   }
   
   static func publisher(board: BoardName, no: PostNumber) -> AnyPublisher<ChanThread, Error> {
