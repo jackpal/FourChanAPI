@@ -3,7 +3,7 @@
 import Combine
 import Foundation
 
-let dataCache = Cache<URL, Data>(maximumEntryCount: 500)
+let dataCache = Cache<URL, Data>(maximumEntryCount: 50)
 
 /// Returns a publisher for a URL. Caches and retries errors.
 public func URLLoader(url: URL) -> AnyPublisher<Data, Error> {
