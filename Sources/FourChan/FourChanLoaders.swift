@@ -15,7 +15,7 @@ public class Loader<T> : ObservableObject {
   
   /// Interface to triger reloading. Clients set loading to true, which will trigger a reload.
   /// When reloading is complete, loading will be set to false.
-  @Published var loading: Bool = false {
+  @Published public var loading: Bool = false {
       didSet {
           if oldValue == false && loading == true {
               self.load(publisher:publisher)
