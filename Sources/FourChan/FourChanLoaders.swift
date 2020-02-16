@@ -98,5 +98,11 @@ public class ChanThreadLoader : Loader<ChanThread> {
   }
 }
 
+/// A bring-your-own-publisher loader for PostInContext
+public class PostInContextLoader : Loader<PostInContext> {
+  public override init(publisher: AnyPublisher<PostInContext, Error>) {
+    super.init(publisher:publisher)
+  }
+}
 
 #endif // canImport(Combine)
