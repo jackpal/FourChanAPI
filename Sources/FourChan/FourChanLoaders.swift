@@ -7,11 +7,28 @@ public class Loader<T> : ObservableObject {
   
   public var objectWillChange: AnyPublisher<T?, Never> = Publishers.Sequence<[T?], Never>(sequence: []).eraseToAnyPublisher()
   
-  @Published public var data: T? = nil
+  @Published public var data: T? = nil {
+    didSet {
+      self.loading = false
+    }
+  }
+  
+  /// Interface to triger reloading. Clients set loading to true, which will trigger a reload.
+  /// When reloading is complete, loading will be set to false.
+  @Published var loading: Bool = false {
+      didSet {
+          if oldValue == false && loading == true {
+              self.load(publisher:publisher)
+          }
+      }
+  }
+  
+  private let publisher: AnyPublisher<T, Error>
   
   var cancellable: AnyCancellable?
   
   public init(publisher: AnyPublisher<T, Error>) {
+    self.publisher = publisher
     self.objectWillChange =
       $data.handleEvents(receiveSubscription: { [weak self] sub in
         self?.load(publisher:publisher)
@@ -21,13 +38,11 @@ public class Loader<T> : ObservableObject {
   }
   
   private func load(publisher: AnyPublisher<T, Error>) {
-    if data == nil {
-      cancellable =  publisher
-        .map { Optional($0) }
-        .replaceError(with: nil)
-        .receive(on: RunLoop.main)
-        .assign(to: \Loader.data, on: self)
-    }
+    cancellable =  publisher
+      .map { Optional($0) }
+      .replaceError(with: nil)
+      .receive(on: RunLoop.main)
+      .assign(to: \Loader.data, on: self)
   }
   
   deinit {
