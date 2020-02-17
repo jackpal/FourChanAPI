@@ -91,9 +91,9 @@ public extension FourChanService {
    */
   func posts() -> AnyPublisher<PostInContext, Error> {
     boards()
-    .flatMap { boards in
+    .flatMap(maxPublishers: .max(1)) { boards in
       Publishers.Sequence<[Board], Error>(sequence: boards.boards)
-        .flatMap { board in
+        .flatMap(maxPublishers: .max(1)) { board in
           self.posts(board:board.board)
       }
     }.eraseToAnyPublisher()
@@ -104,11 +104,11 @@ public extension FourChanService {
    */
   func posts(board: BoardName) -> AnyPublisher<PostInContext, Error> {
     threads(board:board)
-      .flatMap { pages in
+      .flatMap(maxPublishers: .max(1)) { pages in
         Publishers.Sequence<[Page], Error>(sequence: pages)
-          .flatMap { page in
+          .flatMap(maxPublishers: .max(1)) { page in
             Publishers.Sequence<[Post], Error>(sequence: page.threads)
-              .flatMap { post in
+              .flatMap(maxPublishers: .max(1)) { post in
                 self.posts(board:board, no:post.no)
             }
         }
@@ -120,7 +120,7 @@ public extension FourChanService {
    */
   func posts(board: BoardName, no:PostNumber) -> AnyPublisher<PostInContext, Error> {
     thread(board:board, no:no)
-    .flatMap { chanThread in
+    .flatMap(maxPublishers: .max(1)) { chanThread in
       Publishers.Sequence<Posts, Error>(sequence: chanThread.posts)
       .map {
         PostInContext(board: board,

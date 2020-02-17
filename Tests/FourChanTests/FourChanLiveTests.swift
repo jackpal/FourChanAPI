@@ -21,7 +21,7 @@ final class FourChanLiveTests: XCTestCase {
   
   func testChanThreadLoader() {
     let publisher = CatalogLoader.publisher(board: "a")
-      .flatMap { (catalog:Catalog) -> AnyPublisher<ChanThread,Error> in
+      .flatMap(maxPublishers: .max(1)) { (catalog:Catalog) -> AnyPublisher<ChanThread,Error> in
         let no = catalog.first?.threads.first?.no ?? 0
         return ChanThreadLoader.publisher(board: "a", no:no)
     }
