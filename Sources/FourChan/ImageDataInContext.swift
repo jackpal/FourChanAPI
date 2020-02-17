@@ -6,6 +6,12 @@ import Foundation
 public struct ImageDataInContext {
   public let post: PostInContext
   public let imageData: Data
+  
+  public init(post: PostInContext, imageData: Data) {
+    self.post = post
+    self.imageData = imageData
+  }
+
 }
 
 public extension Publisher where Self.Output == PostInContext, Self.Failure == Error {
