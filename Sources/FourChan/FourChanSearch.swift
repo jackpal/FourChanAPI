@@ -10,24 +10,27 @@ public struct FourChanSearchResults: Codable {
 public struct FourChanSearchResultsBody: Codable {
   public let board: String?
   public let nhits: Int?
-  public let offset: String? // Encoding a decimal integer
+  public let offset: String?  // Encoding a decimal integer
   public let query: String?
+
   public let threads: [FourChanSearchResultsThread]?
 }
 
 public struct FourChanSearchResultsThread: Codable, Identifiable {
   public let board: String?
   public let posts: [Post]?
-  public let thread: String // "tNNNN" threadID
-  
-  public var id: String { return thread}
+  public let thread: String  // "tNNNN" threadID
+
+  public var id: String { return thread }
 }
 
-func search(query:String,
-            offset: Int? = nil,
-            length: Int? = nil,
-            board: String?) -> URL? {
-  var params = ["q":query]
+func search(
+  query: String,
+  offset: Int? = nil,
+  length: Int? = nil,
+  board: String?
+) -> URL? {
+  var params = ["q": query]
   if let offset = offset {
     params["o"] = "\(offset)"
   }
@@ -40,15 +43,18 @@ func search(query:String,
   return FourChanAPIEndpoint.search.url(params: params)
 }
 
-public extension FourChanSearchResults {
-  func filter(_ isIncluded: (FourChanSearchResultsThread) -> Bool) -> FourChanSearchResults {
-    FourChanSearchResults(body:
-      self.body?.filter(isIncluded))
+extension FourChanSearchResults {
+  public func filter(_ isIncluded: (FourChanSearchResultsThread) -> Bool) -> FourChanSearchResults {
+    FourChanSearchResults(
+      body:
+        self.body?.filter(isIncluded))
   }
 }
 
-public extension FourChanSearchResultsBody {
-  func filter(_ isIncluded: (FourChanSearchResultsThread) -> Bool) -> FourChanSearchResultsBody {
+extension FourChanSearchResultsBody {
+  public func filter(_ isIncluded: (FourChanSearchResultsThread) -> Bool)
+    -> FourChanSearchResultsBody
+  {
     FourChanSearchResultsBody(
       board: board,
       nhits: nhits,

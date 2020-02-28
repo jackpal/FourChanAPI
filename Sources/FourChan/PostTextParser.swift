@@ -9,18 +9,18 @@ public class PostTextParser {
     case deadLink(text: String)
     case anchor(text: String, href: String)
   }
-  
-  public init(){}
 
-  public func parse(text: String, consumer: (Element) -> Void ) {
+  public init() {}
+
+  public func parse(text: String, consumer: (Element) -> Void) {
     var tagStack: [String] = []
     textCoalescingTokenizer(text: text) {
-      switch($0) {
+      switch $0 {
       case .text(let text):
         if let context = tagStack.last {
           switch context {
           case "<b>":
-            consumer(.bold(text:text))
+            consumer(.bold(text: text))
           case "<s>":
             consumer(.strikethrough(text: text))
           case #"<span class="quote">"#:
@@ -30,17 +30,19 @@ public class PostTextParser {
           default:
             if context.starts(with: "<a ") {
               var hrefText = ""
-              if let hrefRange = context.range(of: #"href="[^"]*""#,
-                                               options: .regularExpression) {
+              if let hrefRange = context.range(
+                of: #"href="[^"]*""#,
+                options: .regularExpression)
+              {
                 let start = context.index(hrefRange.lowerBound, offsetBy: 6)
                 let end = context.index(hrefRange.upperBound, offsetBy: -1)
                 hrefText = String(context[start..<end])
               }
-              consumer(.anchor(text:text, href:hrefText))
+              consumer(.anchor(text: text, href: hrefText))
             }
           }
         } else {
-          consumer(.plain(text:text))
+          consumer(.plain(text: text))
         }
       case .start(let text):
         tagStack.append(text)
@@ -49,29 +51,29 @@ public class PostTextParser {
       }
     }
   }
-  
+
   private enum Token {
-    case text(text:String)
+    case text(text: String)
     case start(tag: String)
     case end(tag: String)
   }
-  
-  private let entityDictionary : [String: Character]  = [
+
+  private let entityDictionary: [String: Character] = [
     "&#039;": "'",
     "&#044;": ",",
     "&amp;": "&",
     "&gt;": ">",
     "&lt;": "<",
-    "&quot;": "\""
+    "&quot;": "\"",
   ]
-  
+
   private func tokenize(text: String, consumer: (Token) -> Void) {
     var chunk = text[...]
     while !chunk.isEmpty {
       if let splitRange = chunk.range(of: #"<|&"#, options: .regularExpression) {
         let prefix = chunk[..<splitRange.lowerBound]
         if !prefix.isEmpty {
-          consumer(.text(text:String(prefix)))
+          consumer(.text(text: String(prefix)))
         }
         let remainder = chunk[splitRange.lowerBound...]
         let splitChar = remainder.prefix(1)
@@ -79,9 +81,9 @@ public class PostTextParser {
           if let tagRange = remainder.range(of: #"<[^>]*>"#, options: .regularExpression) {
             let tag = remainder[tagRange]
             if tag.prefix(2) == "</" {
-              consumer(.end(tag:String(tag)))
+              consumer(.end(tag: String(tag)))
             } else {
-              consumer(.start(tag:String(tag)))
+              consumer(.start(tag: String(tag)))
             }
             chunk = remainder[tagRange.upperBound...]
           } else {
@@ -96,7 +98,7 @@ public class PostTextParser {
               consumer(.text(text: String(decodedEntity)))
             } else {
               // Unknown entity
-              consumer(.text(text:entity))
+              consumer(.text(text: entity))
             }
             chunk = remainder[entityRange.upperBound...]
           } else {
@@ -106,16 +108,16 @@ public class PostTextParser {
           }
         }
       } else {
-        consumer(.text(text:String(chunk)))
+        consumer(.text(text: String(chunk)))
         break
       }
     }
   }
-  
+
   // Handles <br>, <wbr>, and combines sequences of text into one text.
   private func textCoalescingTokenizer(text: String, consumer: (Token) -> Void) {
     var textBuffer = ""
-    tokenize(text:text){
+    tokenize(text: text) {
       switch $0 {
       case .text(let text):
         textBuffer += text
@@ -145,4 +147,3 @@ public class PostTextParser {
     }
   }
 }
-

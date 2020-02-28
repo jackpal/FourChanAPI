@@ -8,14 +8,17 @@ public enum FourChanAPIEndpoint {
   case catalog(board: BoardName)
   case thread(board: BoardName, no: PostNumber)
   case threads(board: BoardName, page: PageNumber)
+
   /// The threads have minimal information filled in.
   case allThreads(board: BoardName)
+
   case archive(board: BoardName)
   case image(board: BoardName, tim: ImageNumber, ext: String)
   case thumbnail(board: BoardName, tim: ImageNumber)
   case spoilerImage
   case flag(country: String)
   case polFlag(country: String)
+
   /// Mobile Search endpoint. Takes additional query parameters.
   case search
 }
@@ -52,8 +55,8 @@ extension FourChanAPIEndpoint {
 }
 
 extension FourChanAPIEndpoint {
-  public func url(params: [String:String]? = nil) -> URL {
-    var components = URLComponents(url: URL(string:path)!, resolvingAgainstBaseURL: true)!
+  public func url(params: [String: String]? = nil) -> URL {
+    var components = URLComponents(url: URL(string: path)!, resolvingAgainstBaseURL: true)!
     if let params = params {
       components.queryItems = params.map { (key, value) in
         URLQueryItem(name: key, value: value)

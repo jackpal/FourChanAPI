@@ -1,7 +1,7 @@
 import Foundation
 
 #if canImport(FoundationNetworking)
-import FoundationNetworking
+  import FoundationNetworking
 #endif
 
 /// A completion-handler-based API.
@@ -10,17 +10,19 @@ import FoundationNetworking
 public struct FourChanAPIService {
   public static let shared = FourChanAPIService()
   let decoder = JSONDecoder()
-  
+
   public enum APIError: Error {
     case noResponse
     case jsonDecodingError(error: Error)
     case networkError(error: Error)
   }
-    
-  public func GET<T: Codable>(endpoint: FourChanAPIEndpoint,
-                              params: [String:String]? = nil,
-                              completionHandler: @escaping (Result<T, APIError>) -> Void) {
-    var request = URLRequest(url:endpoint.url(params: params))
+
+  public func GET<T: Codable>(
+    endpoint: FourChanAPIEndpoint,
+    params: [String: String]? = nil,
+    completionHandler: @escaping (Result<T, APIError>) -> Void
+  ) {
+    var request = URLRequest(url: endpoint.url(params: params))
     request.httpMethod = "GET"
     let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
       guard let data = data else {
@@ -43,7 +45,7 @@ public struct FourChanAPIService {
       } catch let error {
         DispatchQueue.main.async {
           #if DEBUG
-          print("JSON decoding error: \(error)")
+            print("JSON decoding error: \(error)")
           #endif
           completionHandler(.failure(.jsonDecodingError(error: error)))
         }

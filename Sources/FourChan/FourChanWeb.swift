@@ -4,8 +4,8 @@ import Foundation
 public enum FourChanWebEndpoint {
   case root
   case catalog(board: BoardName)
-  case thread(board: BoardName, thread:Int)
-  case post(board: BoardName, thread:Int, post: Int)
+  case thread(board: BoardName, thread: Int)
+  case post(board: BoardName, thread: Int, post: Int)
 }
 
 extension FourChanWebEndpoint {
@@ -23,9 +23,8 @@ extension FourChanWebEndpoint {
   }
 }
 
-public extension FourChanWebEndpoint {
-  var url: URL {
-    return URL(string:path())!
+extension FourChanWebEndpoint {
+  public var url: URL {
+    return URL(string: path())!
   }
 }
-
