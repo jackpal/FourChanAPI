@@ -1,10 +1,7 @@
 #if canImport(Combine)
 
   import Combine
-
-  #if canImport(UIKit)
-    import UIKit
-  #endif
+  import Foundation
 
   /// The FourChan API exposed as Combine Publishers.
   public class FourChanService {
@@ -67,12 +64,15 @@
 
   // TODO: Extend this to watchOS, macOS, tvOS.
   #if canImport(UIKit)
+
+    import UIKit
+
     extension FourChanService {
 
       public func publisher(endpoint: FourChanAPIEndpoint) -> AnyPublisher<UIImage, Error> {
         publisher(endpoint: endpoint)
-          .compactMap(UIImage.init(data:))
-          .eraseToAnyPublisher()
+        .compactMap(UIImage.init(data:))
+        .eraseToAnyPublisher()
       }
 
       public func image(board: BoardName, tim: Int, ext: String) -> AnyPublisher<UIImage, Error> {
@@ -82,7 +82,9 @@
       public func thumbnail(board: BoardName, tim: Int) -> AnyPublisher<UIImage, Error> {
         publisher(endpoint: .thumbnail(board: board, tim: tim))
       }
+
     }
+
   #endif
 
   extension FourChanService {
