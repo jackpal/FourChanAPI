@@ -93,7 +93,7 @@ public struct Post: Codable, Hashable {
   public let trip: String?
 
   // Conflicts with Identifiable protocol.
-  // public let id: String?
+  public let pid: String?
   /// Capcode
   public let capcode: String?
 
@@ -188,6 +188,17 @@ public struct Post: Codable, Hashable {
 
 extension Post: Identifiable {
   public var id: Int { return no }
+}
+
+extension Post {
+  enum CodingKeys: String, CodingKey {
+      case pid = "id"
+      case no, resto, sticky, closed, archived, archived_on, now,
+           name, trip, capcode, country, country_name, sub, com,
+           tim, filename, ext, fsize, md5, w, h, tn_w, tn_h, filedeleted,
+           spoiler, custom_spoiler, omitted_posts, omitted_images, time, semantic_url, unique_ips,
+           replies, images, bumplimit, imagelimit, lastReplies, last_modified, tag, since4pass
+  }
 }
 
 /// A FourChan Thread.
