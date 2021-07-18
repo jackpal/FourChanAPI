@@ -56,19 +56,32 @@ final class PostTextParserTest: XCTestCase {
   }
 
   func testRawLink() {
-    let result = parse(text: ##"abc example.com/a/b.gif http://example.com/e<wbr>/f.gif ghi"##)
+    let result = parse(text: ##"abc example.com/a/b.gif http://example.com/e<wbr>/f.gif ghi https://example.com/b jkl"##)
     let link1 = "example.com/a/b.gif"
     let link2 = "http://example.com/e\u{200b}/f.gif"
     let href2 = "http://example.com/e/f.gif"
+    let link3 = "https://example.com/b"
     XCTAssertEqual(result, [
       .plain(text: "abc "),
       .anchor(text: link1, href: link1),
       .plain(text: " "),
       .anchor(text: link2, href: href2),
-      .plain(text: " ghi")
+      .plain(text: " ghi "),
+      .anchor(text: link3, href: link3),
+      .plain(text: " jkl"),
     ])
   }
 
+  func testRawMagnetLink() {
+    let result = parse(text: ##"abc magnet:?xt=urn:udp:xd def"##)
+    let link = "magnet:?xt=urn:udp:xd"
+    XCTAssertEqual(result, [
+      .plain(text: "abc "),
+      .anchor(text: link, href: link),
+      .plain(text: " def"),
+    ])
+  }
+  
   func testEntity() {
     let result = parse(text: #"&#039;&#044;&amp;&gt;&lt;&quot;"#)
     XCTAssertEqual(result, [
