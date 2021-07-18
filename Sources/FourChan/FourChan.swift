@@ -134,6 +134,12 @@ public struct Post: Codable, Hashable {
   /// Country name.
   public let country_name: String?
 
+  /// Poster's board flag code
+  public let board_flag: String?
+
+  /// Poster's board flag name
+  public let flag_name: String?
+
   /// Subject
   public let sub: String?
 

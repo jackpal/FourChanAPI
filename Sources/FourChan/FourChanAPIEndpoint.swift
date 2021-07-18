@@ -18,6 +18,8 @@ public enum FourChanAPIEndpoint {
   case spoilerImage
   case flag(country: String)
   case polFlag(country: String)
+  case boardFlag(board: BoardName, code: String)
+  case customSpoiler(board: BoardName, index: Int)
 
   /// Mobile Search endpoint. Takes additional query parameters.
   case search
@@ -48,6 +50,10 @@ extension FourChanAPIEndpoint {
       return "https://s.4cdn.org/image/country/\(country.lowercased()).gif"
     case let .polFlag(country):
       return "https://s.4cdn.org/image/country/troll/\(country).gif"
+    case let .boardFlag(board, code):
+      return "https://s.4cdn.org/image/flags/\(board)/\(code).gif"
+    case let .customSpoiler(board, index):
+      return "https://s.4cdn.org/image/spoiler-\(board)\(index).png"
     case .search:
       return "https://p.4chan.org/api/search"
     }
