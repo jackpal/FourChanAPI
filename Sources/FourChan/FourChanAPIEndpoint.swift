@@ -51,7 +51,7 @@ extension FourChanAPIEndpoint {
     case let .polFlag(country):
       return "https://s.4cdn.org/image/country/troll/\(country).gif"
     case let .boardFlag(board, code):
-      return "https://s.4cdn.org/image/flags/\(board)/\(code).gif"
+      return "https://s.4cdn.org/image/flags/\(board)/\(code.lowercased()).gif"
     case let .customSpoiler(board, index):
       return "https://s.4cdn.org/image/spoiler-\(board)\(index).png"
     case .search:
