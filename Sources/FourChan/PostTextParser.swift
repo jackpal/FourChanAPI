@@ -1,6 +1,6 @@
 import Foundation
 
-public class PostTextParser {
+public struct PostTextParser {
   public enum Element {
     case plain(text: String)
     case bold(text: String)

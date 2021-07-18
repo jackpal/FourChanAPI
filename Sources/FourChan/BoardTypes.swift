@@ -49,7 +49,7 @@ let nsfwBoardCategories = Set(["Adult", "Misc", uncategorized])
 
 let lowImageBoards = Set(["f"])
 
-class CategoryDB {
+struct CategoryDB {
   let boardNameCategory: [String: String]
 
   init() {

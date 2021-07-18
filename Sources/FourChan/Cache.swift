@@ -2,7 +2,7 @@ import Foundation
 
 // Based on https://www.swiftbysundell.com/articles/caching-in-swift/
 
-public final class Cache<Key: Hashable, Value> {
+struct Cache<Key: Hashable, Value> {
   private let wrapped = NSCache<WrappedKey, Entry>()
   private let dateProvider: () -> Date
   private let entryLifetime: TimeInterval
@@ -133,7 +133,7 @@ extension Cache {
 }
 
 extension Cache: Codable where Key: Codable, Value: Codable {
-  public convenience init(from decoder: Decoder) throws {
+  init(from decoder: Decoder) throws {
     self.init()
 
     let container = try decoder.singleValueContainer()
@@ -141,14 +141,14 @@ extension Cache: Codable where Key: Codable, Value: Codable {
     entries.forEach(insert)
   }
 
-  public func encode(to encoder: Encoder) throws {
+  func encode(to encoder: Encoder) throws {
     var container = encoder.singleValueContainer()
     try container.encode(keyTracker.keys.compactMap(entry))
   }
 }
 
 extension Cache where Key: Codable, Value: Codable {
-  public func saveToDisk(
+  func saveToDisk(
     withName name: String,
     using fileManager: FileManager = .default
   ) throws {

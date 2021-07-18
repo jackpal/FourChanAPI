@@ -4,7 +4,7 @@
   import Foundation
 
   /// The FourChan API exposed as Combine Publishers.
-  public class FourChanService {
+  public struct FourChanService {
 
     public static let shared = FourChanService()
 
