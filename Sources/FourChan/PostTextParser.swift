@@ -57,7 +57,8 @@ public struct PostTextParser {
               consumer(.plain(text: String(text[Range(prefix, in: text)!])))
             }
             let url = String(text[Range(range, in: text)!])
-            consumer(.anchor(text:url, href: url))
+            let href = url.replacingOccurrences(of: "\u{200b}", with: "")
+            consumer(.anchor(text:url, href: href))
             lastConsumedIndex = range.upperBound
           }
           if lastConsumedIndex < nsrange.upperBound {

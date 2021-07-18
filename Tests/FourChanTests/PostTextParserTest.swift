@@ -56,14 +56,15 @@ final class PostTextParserTest: XCTestCase {
   }
 
   func testRawLink() {
-    let result = parse(text: ##"abc example.com/a/b.gif http://example.com/e/f.gif ghi"##)
+    let result = parse(text: ##"abc example.com/a/b.gif http://example.com/e<wbr>/f.gif ghi"##)
     let link1 = "example.com/a/b.gif"
-    let link2 = "http://example.com/e/f.gif"
+    let link2 = "http://example.com/e\u{200b}/f.gif"
+    let href2 = "http://example.com/e/f.gif"
     XCTAssertEqual(result, [
       .plain(text: "abc "),
       .anchor(text: link1, href: link1),
       .plain(text: " "),
-      .anchor(text: link2, href: link2),
+      .anchor(text: link2, href: href2),
       .plain(text: " ghi")
     ])
   }
