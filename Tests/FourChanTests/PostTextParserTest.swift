@@ -75,6 +75,13 @@ final class PostTextParserTest: XCTestCase {
     ])
   }
 
+  func testBR() {
+    let result = parse(text: #"abc<br><br>def<wbr>ghi"#)
+    XCTAssertEqual(result, [
+      .plain(text: "abc\n\ndef\u{200b}ghi")
+    ])
+  }
+
   // MARK: Private methods
   func parse(text: String) -> [PostTextParser.Element] {
     var accumulator: [PostTextParser.Element] = []
