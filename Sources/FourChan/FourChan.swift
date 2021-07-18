@@ -15,7 +15,7 @@ public struct Board: Codable, Hashable {
   public let board: BoardName
   public let title: String
 
-  // Worksafe board
+  /// Worksafe board
   public let ws_board: Int
 
   public let per_page: Int
@@ -35,7 +35,37 @@ public struct Board: Codable, Hashable {
 
   public let cooldowns: Cooldowns
   public let meta_description: String
+  /// Are spoilers enabled
+  public let spoilers: Int?
+  /// How many custom spoilers does the board have
+  public let custom_spoilers: Int?
   public let is_archived: Int?
+  /// Key: Flag Code, Value: Flag Name
+  public let board_flags: [String:String]?
+  /// Are flags showing the poster's country enabled on the board
+  public let country_flags: Int?
+  /// Are poster ID tags enabled on the board
+  public let user_ids: Int?
+  /// Can users submit drawings via browser the Oekaki app
+  public let oekaki: Int?
+  /// Can users submit sjis drawings using the [sjis] tags
+  public let sjis_tags: Int?
+  /// Board supports code syntax highlighting using the [code] tags
+  public let code_tags: Int?
+  /// Board supports [math] TeX and [eqn] tags
+  public let math_tags: Int?
+  /// Is image posting disabled for the board
+  public let text_only: Int?
+  /// Is the name field disabled on the board
+  public let forced_anon: Int?
+  /// Are webms with audio allowed?
+  public let webm_audio: Int?
+  /// Do OPs require a subject
+  public let require_subject: Int?
+  /// What is the minimum image width (in pixels)
+  public let min_image_width: Int?
+  /// What is the minimum image height (in pixels)
+  public let min_image_height: Int?
 }
 
 extension Board: Identifiable {
