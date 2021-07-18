@@ -92,8 +92,9 @@ public struct Post: Codable, Hashable {
   /// Tripcode.
   public let trip: String?
 
-  // Conflicts with Identifiable protocol.
+  // The poster's ID. Any 8 characters.
   public let pid: String?
+
   /// Capcode
   public let capcode: String?
 
