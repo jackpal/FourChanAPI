@@ -185,6 +185,10 @@ public struct Post: Codable, Hashable {
 
   /// Year 4chan pass bought.
   public let since4pass: Int?
+
+  /// Mobile optimized image exists for post
+  public let m_img: Int?
+
 }
 
 extension Post: Identifiable {
@@ -198,7 +202,7 @@ extension Post {
            name, trip, capcode, country, country_name, sub, com,
            tim, filename, ext, fsize, md5, w, h, tn_w, tn_h, filedeleted,
            spoiler, custom_spoiler, omitted_posts, omitted_images, time, semantic_url, unique_ips,
-           replies, images, bumplimit, imagelimit, lastReplies, last_modified, tag, since4pass
+           replies, images, bumplimit, imagelimit, lastReplies, last_modified, tag, since4pass, m_img
   }
 }
 
