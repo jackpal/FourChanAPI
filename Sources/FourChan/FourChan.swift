@@ -235,7 +235,7 @@ extension Post {
   enum CodingKeys: String, CodingKey {
       case pid = "id"
       case no, resto, sticky, closed, archived, archived_on, now,
-           name, trip, capcode, country, country_name, sub, com,
+           name, trip, capcode, country, country_name, board_flag, flag_name, sub, com,
            tim, filename, ext, fsize, md5, w, h, tn_w, tn_h, filedeleted,
            spoiler, custom_spoiler, omitted_posts, omitted_images, time, semantic_url, unique_ips,
            replies, images, bumplimit, imagelimit, lastReplies, last_modified, tag, since4pass, m_img
