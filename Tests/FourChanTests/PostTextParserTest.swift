@@ -46,7 +46,7 @@ final class PostTextParserTest: XCTestCase {
     ])
   }
 
-  func testCodeink() {
+  func testCode() {
     let result = parse(text: #"abc<pre class="prettyprint">def<br>ghi</pre>jkl"#)
     XCTAssertEqual(result, [
       .plain(text: "abc"),
