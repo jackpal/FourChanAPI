@@ -8,6 +8,7 @@ public struct PostTextParser {
     case quote(text: String)
     case deadLink(text: String)
     case anchor(text: String, href: String)
+    case code(text: String)
   }
 
   /// Matches in-code URLs. See https://gist.github.com/gruber/249502
@@ -34,6 +35,8 @@ public struct PostTextParser {
             consumer(.quote(text: text))
           case #"<span class="deadlink">"#:
             consumer(.deadLink(text: text))
+          case #"<pre class="prettyprint">"#:
+            consumer(.code(text: text))
           default:
             if context.starts(with: "<a ") {
               var hrefText = ""

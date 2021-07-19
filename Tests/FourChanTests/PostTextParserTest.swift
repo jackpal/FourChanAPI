@@ -46,6 +46,15 @@ final class PostTextParserTest: XCTestCase {
     ])
   }
 
+  func testCodeink() {
+    let result = parse(text: #"abc<pre class="prettyprint">def<br>ghi</pre>jkl"#)
+    XCTAssertEqual(result, [
+      .plain(text: "abc"),
+      .code(text: "def\nghi"),
+      .plain(text: "jkl")
+    ])
+  }
+
   func testALink() {
     let result = parse(text: ##"abc<a href="#foo">def</a>ghi"##)
     XCTAssertEqual(result, [
